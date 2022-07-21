@@ -1,3 +1,9 @@
+local SupportedGames = {
+    5872075530,
+    2262441883,
+    
+}
+
 local UILib = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
 local Window = UILib.CreateLib("LarWare", "Serpent")
