@@ -31,7 +31,7 @@ local SupportedGames = {
 }
 
 local GlobalTabs = {
-    ["TriggerBot"] = function()
+    ["TriggerBot"] = function(Window)
         local TriggerRenderConn
 
         local TriggerBot = false
@@ -94,7 +94,7 @@ local function CreateUI()
 
         if SupportedGames[GameId][2] then
             for _, TabName in pairs(SupportedGames[GameId][2]) do
-                GlobalTabs[TabName]()
+                GlobalTabs[TabName](Window)
             end
         end
     else
