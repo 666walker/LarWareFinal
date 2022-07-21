@@ -141,7 +141,7 @@ local SupportedGames = {
         })
 
         CombatTab:Toggle({
-            Text = "WallChecks",
+            Text = "Wall Checks",
             Callback = function(boolean)
                 TriggerBotWallCheck = boolean
             end
