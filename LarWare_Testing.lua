@@ -68,6 +68,7 @@ local SupportedGames = {
 }
 
 local function CreateUI()
+    print("NiggaFied")
     for Id, Function in pairs(SupportedGames) do
         if Id == GameId then
             local GameName = game:GetService("MarketplaceService"):GetProductInfo(GameId).Name
