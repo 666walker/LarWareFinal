@@ -3,9 +3,9 @@ local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
 local Mouse = Player:GetMouse()
-local GameId = tonumber(game.GameId)
+local GameId = tonumber(game.PlaceId)
 
-local UILib = loadstring(game:HttpGet('https://raw.githubusercontent.com/ZepsyyCodesLUA/Ellik/main/source.lua', true))()
+local UILib = loadstring(game:HttpGet("https://raw.githubusercontent.com/666walker/ZepsyyCodesLUA_Modified/main/code", true))()
 
 local function RayCast(Point1, Point2, WL)
     local Cast = Ray.new(Point1, (Point2 - Point1).Unit * 10000)
@@ -19,11 +19,11 @@ local SupportedGames = {
 
         local AimAssist = false
 
-        local CombatTab = Window:NewTab({
-            Title = "Combat"
+        local TriggerBotTab = Window:NewTab({
+            Title = "Trigger Bot"
         })
 
-        CombatTab:Toggle({
+        TriggerBotTab:Toggle({
             Text = "Trigger Bot",
             Callback = function(boolean)
                 TriggerBot = boolean
@@ -57,7 +57,7 @@ local SupportedGames = {
         })
     end,
 
-    [2262441883] = function(Window)
+    [2262441883] = function(Window) -- es
         
     end,
 
@@ -68,21 +68,24 @@ local SupportedGames = {
 }
 
 local function CreateUI()
+    local NameGame = game:GetService("MarketplaceService"):GetProductInfo(GameId).Name
+
     if SupportedGames[GameId] then
-        print("sinmpl")
-        local GameName = game:GetService("MarketplaceService"):GetProductInfo(GameId).Name
-
         local Window = UILib:Create({
-            Title = "LarWare "..GameName
+            Title = "LarWare",
+            GameName = NameGame,
         })
-
+    
         local WelcomeTab = Window:NewTab({
             Title = "Welcome!"
         })
 
-        Function(Window)
+        SupportedGames[GameId](Window)
     else
-        print("whats going on bud")
+        local Window = UILib:Create({
+            Title = "LarWare",
+            GameName = "Unsupported Game",
+        })
     end
 end
 
