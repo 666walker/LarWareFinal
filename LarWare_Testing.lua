@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
 local Mouse = Player:GetMouse()
-local GameId = game.GameId
+local GameId = tonumber(game.GameId)
 
 local UILib = loadstring(game:HttpGet('https://raw.githubusercontent.com/ZepsyyCodesLUA/Ellik/main/source.lua', true))()
 
@@ -68,21 +68,18 @@ local SupportedGames = {
 }
 
 local function CreateUI()
-    print("NiggaFied")
-    for Id, Function in pairs(SupportedGames) do
-        if Id == GameId then
-            local GameName = game:GetService("MarketplaceService"):GetProductInfo(GameId).Name
+    if SupportedGames[GameId] then
+        local GameName = game:GetService("MarketplaceService"):GetProductInfo(GameId).Name
 
-            local Window = UILib:Create({
-                Title = "LarWare "..GameName
-            })
+        local Window = UILib:Create({
+            Title = "LarWare "..GameName
+        })
 
-            local WelcomeTab = Window:NewTab({
-                Title = "Welcome!"
-            })
+        local WelcomeTab = Window:NewTab({
+            Title = "Welcome!"
+        })
 
-            Function(Window)
-        end
+        Function(Window)
     end
 end
 
