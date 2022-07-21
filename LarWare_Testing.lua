@@ -84,3 +84,5 @@ local function CreateUI()
         end
     end
 end
+
+CreateUI()
