@@ -1,10 +1,22 @@
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
 local GameId = game.GameId
 
 local UILib = loadstring(game:HttpGet('https://raw.githubusercontent.com/ZepsyyCodesLUA/Ellik/main/source.lua', true))()
 
+local function RayCast(Point1, Point2, WL)
+    local Cast = Ray.new(Point1, (Point2 - Point1).Unit * 10000)
+    return workspace:FindPartOnRayWithIgnoreList(Cast, WL, false, true)
+end
+
 local SupportedGames = {
     [5872075530] = function(Window) -- anarchy
         local TriggerBot = false
+        local TriggerBotWallCheck = false
+
         local AimAssist = false
 
         local CombatTab = Window:NewTab({
@@ -15,6 +27,32 @@ local SupportedGames = {
             Text = "Trigger Bot",
             Callback = function(boolean)
                 TriggerBot = boolean
+
+                local MouseConn
+                if Triggerbot then
+                    MouseConn = RunService.RenderStepped:Connect(function()
+                        if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
+                            if TriggerBotWallCheck then
+                                local Hit, Position = RayCast(Player.HumanoidRootPart.Position, Mouse.Hit.Position, Player.Character)
+
+                                if Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
+                                    mouse1click()
+                                end
+                            else
+                                mouse1click()
+                            end
+                        end
+                    end)
+                else
+                    MouseConn:Disconnect()
+                end
+            end
+        })
+
+        CombatTab:Toggle({
+            Text = "WallChecks",
+            Callback = function(boolean)
+                TriggerBotWallCheck = boolean
             end
         })
     end,
