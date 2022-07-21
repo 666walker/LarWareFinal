@@ -69,6 +69,7 @@ local SupportedGames = {
 
 local function CreateUI()
     if SupportedGames[GameId] then
+        print("sinmpl")
         local GameName = game:GetService("MarketplaceService"):GetProductInfo(GameId).Name
 
         local Window = UILib:Create({
@@ -80,6 +81,8 @@ local function CreateUI()
         })
 
         Function(Window)
+    else
+        print("whats going on bud")
     end
 end
 
