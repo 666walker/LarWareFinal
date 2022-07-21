@@ -13,7 +13,25 @@ local function RayCast(Point1, Point2, WL)
 end
 
 local SupportedGames = {
-    [5872075530] = function(Window) -- anarchy
+    [5872075530] = {function(Window) -- anarchy
+        
+    end, {"TriggerBot"}},
+
+    [2262441883] = {function(Window) -- es
+
+    end, {"TriggerBot"}},
+
+    [3297964905] = {function(Window) -- weaponry
+
+    end, {"TriggerBot"}},
+
+    [2996067865] = {function(Window) -- th3ltgrounds
+        
+    end, {"TriggerBot"}},
+}
+
+local GlobalTabs = {
+    ["TriggerBot"] = function()
         local TriggerRenderConn
 
         local TriggerBot = false
@@ -30,97 +48,7 @@ local SupportedGames = {
             Callback = function(boolean)
                 TriggerBot = boolean
 
-                if Triggerbot then
-                    TriggerRenderConn = RunService.RenderStepped:Connect(function()
-                        if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
-                            if TriggerBotWallCheck then
-                                local Hit, Position = RayCast(Player.HumanoidRootPart.Position, Mouse.Hit.Position, Player.Character)
-
-                                if Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
-                                    mouse1click()
-                                end
-                            else
-                                mouse1click()
-                            end
-                        end
-                    end)
-                else
-                    TriggerRenderConn:Disconnect()
-                end
-            end
-        })
-
-        CombatTab:Toggle({
-            Text = "WallChecks",
-            Callback = function(boolean)
-                TriggerBotWallCheck = boolean
-            end
-        })
-    end,
-
-    [2262441883] = function(Window) -- es
-        local TriggerRenderConn
-
-        local TriggerBot = false
-        local TriggerBotWallCheck = false
-
-        local AimAssist = false
-
-        local TriggerBotTab = Window:NewTab({
-            Title = "Trigger Bot"
-        })
-
-        TriggerBotTab:Toggle({
-            Text = "Trigger Bot",
-            Callback = function(boolean)
-                TriggerBot = boolean
-
-                if Triggerbot then
-                    TriggerRenderConn = RunService.RenderStepped:Connect(function()
-                        if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
-                            if TriggerBotWallCheck then
-                                local Hit, Position = RayCast(Player.HumanoidRootPart.Position, Mouse.Hit.Position, Player.Character)
-
-                                if Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
-                                    mouse1click()
-                                end
-                            else
-                                mouse1click()
-                            end
-                        end
-                    end)
-                else
-                    TriggerRenderConn:Disconnect()
-                end
-            end
-        })
-
-        CombatTab:Toggle({
-            Text = "WallChecks",
-            Callback = function(boolean)
-                TriggerBotWallCheck = boolean
-            end
-        })
-    end,
-
-    [3297964905] = function(Window) -- weaponry
-        local TriggerRenderConn
-
-        local TriggerBot = false
-        local TriggerBotWallCheck = false
-
-        local AimAssist = false
-
-        local TriggerBotTab = Window:NewTab({
-            Title = "Trigger Bot"
-        })
-
-        TriggerBotTab:Toggle({
-            Text = "Trigger Bot",
-            Callback = function(boolean)
-                TriggerBot = boolean
-
-                if Triggerbot then
+                if boolean then
                     TriggerRenderConn = RunService.RenderStepped:Connect(function()
                         if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
                             if TriggerBotWallCheck then
@@ -146,8 +74,7 @@ local SupportedGames = {
                 TriggerBotWallCheck = boolean
             end
         })
-    end,
-
+    end
 }
 
 local function CreateUI()
@@ -163,7 +90,13 @@ local function CreateUI()
             Title = "Welcome!"
         })
 
-        SupportedGames[GameId](Window)
+        SupportedGames[GameId][1]()
+
+        if SupportedGames[GameId][2] then
+            for _, TabName in pairs(SupportedGames[GameId][2]) do
+                GlobalTabs[TabName]()
+            end
+        end
     else
         local Window = UILib:Create({
             Title = "LarWare",
