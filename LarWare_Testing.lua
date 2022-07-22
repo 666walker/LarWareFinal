@@ -28,6 +28,10 @@ local SupportedGames = {
     [2996067865] = {function(Window) -- th3ltgrounds
         
     end, {"TriggerBot"}},
+
+    [7142695791] = {function(Window) -- th3ltgrounds
+        
+    end, {"TriggerBot"}},
 }
 
 local GlobalTabs = {
@@ -56,7 +60,7 @@ local GlobalTabs = {
                                 local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, {Player.Character})
 
                                 if TriggerBot and not MouseDown and Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
-                                    mouse1click()
+                                    mouse1press()
                                     MouseDown = true
                                 elseif not Hit.Parent:FindFirstChild("Humanoid") or not Hit.Parent.Parent:FindFirstChild("Humanoid") then
                                     if MouseDown then
@@ -66,7 +70,7 @@ local GlobalTabs = {
                                 end
                             else
                                 if TriggerBot and not MouseDown and Mouse.Target.Parent:FindFirstChild("Humanoid") or Mouse.Target.Parent.Parent:FindFirstChild("Humanoid") then
-                                    mouse1click()
+                                    mouse1press()
                                     MouseDown = true
                                 elseif not Hit.Parent:FindFirstChild("Humanoid") or not Hit.Parent.Parent:FindFirstChild("Humanoid") then
                                     if MouseDown then
