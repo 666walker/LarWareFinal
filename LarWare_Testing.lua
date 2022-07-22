@@ -37,7 +37,7 @@ local GlobalTabs = {
         local TriggerBot = false
         local TriggerBotWallCheck = false
 
-        local AimAssist = false
+        local MouseDown = false
 
         local TriggerBotTab = Window:NewTab({
             Title = "Trigger Bot"
@@ -56,9 +56,19 @@ local GlobalTabs = {
 
                                 if Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
                                     mouse1click()
+                                    MouseDown = true
+                                else
+                                    mouse1release()
+                                    MouseDown = false
                                 end
                             else
-                                mouse1click()
+                                if Mouse.Target.Parent:FindFirstChild("Humanoid") or Mouse.Target.Parent.Parent:FindFirstChild("Humanoid") then
+                                    mouse1click()
+                                    MouseDown = true
+                                else
+                                    mouse1release()
+                                    MouseDown = false
+                                end
                             end
                         end
                     end)
@@ -68,7 +78,7 @@ local GlobalTabs = {
             end
         })
 
-        CombatTab:Toggle({
+        TriggerBotTab:Toggle({
             Text = "Wall Checks",
             Callback = function(boolean)
                 TriggerBotWallCheck = boolean
