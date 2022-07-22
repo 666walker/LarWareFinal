@@ -36,6 +36,7 @@ local GlobalTabs = {
 
         local TriggerBot = false
         local TriggerBotWallCheck = false
+        local TriggerBotTeamCheck = false
 
         local MouseDown = false
 
@@ -48,26 +49,30 @@ local GlobalTabs = {
             Callback = function(boolean)
                 TriggerBot = boolean
 
-                if boolean then
+                if TriggerBot then
                     TriggerRenderConn = RunService.RenderStepped:Connect(function()
                         if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
                             if TriggerBotWallCheck then
                                 local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, {Player.Character})
 
-                                if Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
+                                if TriggerBot and not MouseDown and Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
                                     mouse1click()
                                     MouseDown = true
-                                else
-                                    mouse1release()
-                                    MouseDown = false
+                                elseif not Hit.Parent:FindFirstChild("Humanoid") or not Hit.Parent.Parent:FindFirstChild("Humanoid") then
+                                    if MouseDown then
+                                        mouse1release()
+                                        MouseDown = false
+                                    end
                                 end
                             else
-                                if Mouse.Target.Parent:FindFirstChild("Humanoid") or Mouse.Target.Parent.Parent:FindFirstChild("Humanoid") then
+                                if TriggerBot and not MouseDown and Mouse.Target.Parent:FindFirstChild("Humanoid") or Mouse.Target.Parent.Parent:FindFirstChild("Humanoid") then
                                     mouse1click()
                                     MouseDown = true
-                                else
-                                    mouse1release()
-                                    MouseDown = false
+                                elseif not Hit.Parent:FindFirstChild("Humanoid") or not Hit.Parent.Parent:FindFirstChild("Humanoid") then
+                                    if MouseDown then
+                                        mouse1release()
+                                        MouseDown = false
+                                    end
                                 end
                             end
                         end
@@ -82,6 +87,13 @@ local GlobalTabs = {
             Text = "Wall Checks",
             Callback = function(boolean)
                 TriggerBotWallCheck = boolean
+            end
+        })
+
+        TriggerBotTab:Toggle({
+            Text = "Team Check",
+            Callback = function(boolean)
+                TriggerBotTeamCheck = boolean
             end
         })
     end
