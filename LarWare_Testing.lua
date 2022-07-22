@@ -13,15 +13,13 @@ local function RayCast(Point1, Point2, WL)
 end
 
 local function HumanoidCheck(Part)
-    if Part.Parent then
+    if Part and Part.Parent then
         local Parent = Part.Parent
         local Humanoid = Parent:FindFirstChild("Humanoid")
 
         if Humanoid then
             return Parent, Humanoid
-        end
-        
-        if not Humanoid then
+        else
             if Part.Parent.Parent then
                 Parent = Part.Parent.Parent
                 Humanoid = Parent:FindFirstChild("Humanoid")
@@ -33,7 +31,7 @@ local function HumanoidCheck(Part)
         end
     end
 
-    return
+    return nil
 end
 
 local SupportedGames = {
@@ -62,7 +60,7 @@ local GlobalTabs = {
     ["TriggerBot"] = function(Window)
         local TriggerRenderConn
 
-        local TriggerBot = false
+        local TriggerBotValue = false
         local TriggerBotWallCheck = false
         local TriggerBotTeamCheck = false
         local TriggerBotDelay = 0
@@ -77,19 +75,22 @@ local GlobalTabs = {
         TriggerBotTab:Toggle({
             Text = "Trigger Bot",
             Callback = function(boolean)
-                TriggerBot = boolean
+                TriggerBotValue = boolean
 
-                if TriggerBot then
+                if TriggerBotValue then
                     TriggerRenderConn = RunService.RenderStepped:Connect(function()
                         if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
                             if TriggerBotWallCheck then
                                 if (Mouse.Hit.Position - Player.Character.HumanoidRootPart.Position).Magnitude <= TriggerBotDistanceCheck then
+                                    print("Distance good")
                                     local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, {Player.Character})
                                     local Parent, Humanoid = HumanoidCheck(Hit)
 
                                     if Humanoid then
-                                        if TriggerBot and not MouseDown then
-                                            task.delay(TriggerBotDelay/10, function()
+                                        print("Humanoid found")
+                                        if TriggerBotValue then
+                                            print("triggerbot")
+                                            task.delay(TriggerBotDelay/1000, function()
                                                 print("yes")
                                                 mouse1press()
                                                 MouseDown = true
@@ -105,10 +106,13 @@ local GlobalTabs = {
                                 end
                              else
                                 if (Mouse.Hit.Position - Player.Character.HumanoidRootPart.Position).Magnitude <= TriggerBotDistanceCheck then
+                                    print("Distance good")
                                     local Parent, Humanoid = HumanoidCheck(Mouse.Target)
                                     if Humanoid then
-                                        if TriggerBot and not MouseDown then
-                                            task.delay(TriggerBotDelay/10, function()
+                                        print("humanoid found")
+                                        if TriggerBotValue then
+                                            print("triggerbot")
+                                            task.delay(TriggerBotDelay/1000, function()
                                                 print("yes")
                                                 mouse1press()
                                                 MouseDown = true
