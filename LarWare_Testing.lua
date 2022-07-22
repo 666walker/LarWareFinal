@@ -8,8 +8,32 @@ local GameId = tonumber(game.PlaceId)
 local UILib = loadstring(game:HttpGet("https://raw.githubusercontent.com/666walker/ZepsyyCodesLUA_Modified/main/code", true))()
 
 local function RayCast(Point1, Point2, WL)
-    local Cast = Ray.new(Point1, (Point2 - Point1).Unit * 10000)
+    local Cast = Ray.new(Point1, (Point2 - Point1).Unit * 9999)
     return workspace:FindPartOnRayWithIgnoreList(Cast, WL, false, true)
+end
+
+local function HumanoidCheck(Part)
+    if Part.Parent then
+        local Parent = Part.Parent
+        local Humanoid = Parent:FindFirstChild("Humanoid")
+
+        if Humanoid then
+            return Parent, Humanoid
+        end
+        
+        if not Humanoid then
+            if Part.Parent.Parent then
+                Parent = Part.Parent.Parent
+                Humanoid = Parent:FindFirstChild("Humanoid")
+
+                if Humanoid then
+                    return Parent, Humanoid
+                end
+            end
+        end
+    end
+
+    return
 end
 
 local SupportedGames = {
@@ -41,6 +65,8 @@ local GlobalTabs = {
         local TriggerBot = false
         local TriggerBotWallCheck = false
         local TriggerBotTeamCheck = false
+        local TriggerBotDelay = 0
+        local TriggerBotDistanceCheck = 1500
 
         local MouseDown = false
 
@@ -57,25 +83,43 @@ local GlobalTabs = {
                     TriggerRenderConn = RunService.RenderStepped:Connect(function()
                         if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
                             if TriggerBotWallCheck then
-                                local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, {Player.Character})
+                                if (Mouse.Hit.Position - Player.Character.HumanoidRootPart.Position).Magnitude <= TriggerBotDistanceCheck then
+                                    local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, {Player.Character})
+                                    local Parent, Humanoid = HumanoidCheck(Hit)
 
-                                if TriggerBot and not MouseDown and Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
-                                    mouse1press()
-                                    MouseDown = true
-                                elseif not Hit.Parent:FindFirstChild("Humanoid") or not Hit.Parent.Parent:FindFirstChild("Humanoid") then
-                                    if MouseDown then
-                                        mouse1release()
-                                        MouseDown = false
+                                    if Humanoid then
+                                        if TriggerBot and not MouseDown then
+                                            task.delay(TriggerBotDelay/10, function()
+                                                print("yes")
+                                                mouse1press()
+                                                MouseDown = true
+                                            end)
+                                        elseif not Humanoid then
+                                            if MouseDown then
+                                                print("no")
+                                                mouse1release()
+                                                MouseDown = false
+                                            end
+                                        end
                                     end
                                 end
-                            else
-                                if TriggerBot and not MouseDown and Mouse.Target.Parent:FindFirstChild("Humanoid") or Mouse.Target.Parent.Parent:FindFirstChild("Humanoid") then
-                                    mouse1press()
-                                    MouseDown = true
-                                elseif not Hit.Parent:FindFirstChild("Humanoid") or not Hit.Parent.Parent:FindFirstChild("Humanoid") then
-                                    if MouseDown then
-                                        mouse1release()
-                                        MouseDown = false
+                             else
+                                if (Mouse.Hit.Position - Player.Character.HumanoidRootPart.Position).Magnitude <= TriggerBotDistanceCheck then
+                                    local Parent, Humanoid = HumanoidCheck(Mouse.Target)
+                                    if Humanoid then
+                                        if TriggerBot and not MouseDown then
+                                            task.delay(TriggerBotDelay/10, function()
+                                                print("yes")
+                                                mouse1press()
+                                                MouseDown = true
+                                            end)
+                                        elseif not Humanoid then
+                                            if MouseDown then
+                                                print("no")
+                                                mouse1release()
+                                                MouseDown = false
+                                            end
+                                        end
                                     end
                                 end
                             end
@@ -98,6 +142,26 @@ local GlobalTabs = {
             Text = "Team Check",
             Callback = function(boolean)
                 TriggerBotTeamCheck = boolean
+            end
+        })
+
+        TriggerBotTab:Slider({
+            Text = "Delay (in ms)",
+            Def = 0,
+
+            Callback = function(Value)
+                TriggerBotDelay = Value
+            end
+        })
+
+        TriggerBotTab:Slider({
+            Text = "Distance Check (in Studs)",
+            Min = 100,
+            Max = 1500,
+            Def = 1500,
+
+            Callback = function(Value)
+                TriggerBotDelay = Value
             end
         })
     end
