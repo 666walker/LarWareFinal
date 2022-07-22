@@ -52,7 +52,7 @@ local GlobalTabs = {
                     TriggerRenderConn = RunService.RenderStepped:Connect(function()
                         if Mouse.Target and Player.Character:FindFirstChildOfClass("Tool") then
                             if TriggerBotWallCheck then
-                                local Hit, Position = RayCast(Player.HumanoidRootPart.Position, Mouse.Hit.Position, Player.Character)
+                                local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, Player.Character)
 
                                 if Hit.Parent:FindFirstChild("Humanoid") or Hit.Parent.Parent:FindFirstChild("Humanoid") then
                                     mouse1click()
