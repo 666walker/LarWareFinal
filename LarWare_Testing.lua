@@ -54,6 +54,11 @@ local SupportedGames = {
     [7142695791] = {function(Window) -- th3ltgrounds
         
     end, {"TriggerBot"}},
+
+    [1093237560] = {function(Window) -- random aim trainer
+        
+    end, {"TriggerBot"}},
+
 }
 
 local GlobalTabs = {
@@ -65,6 +70,8 @@ local GlobalTabs = {
         local TriggerBotTeamCheck = false
         local TriggerBotDelay = 0
         local TriggerBotDistanceCheck = 1500
+        local TriggerBotDebounce = false
+        local TriggerBotShotDelay = 100
 
         local MouseDown = false
 
@@ -89,18 +96,31 @@ local GlobalTabs = {
                                     if Humanoid then
                                         print("Humanoid found")
                                         if TriggerBotValue then
-                                            print("triggerbot")
                                             task.delay(TriggerBotDelay/1000, function()
-                                                print("yes")
-                                                mouse1press()
-                                                MouseDown = true
+                                                if not TriggerBotDebounce then
+                                                    TriggerBotDebounce = true
+                                                    if HumanoidCheck(Mouse.Target) then
+                                                        print("yes")
+                                                        mouse1press()
+                                                        MouseDown = true
+                                                    else
+                                                        if MouseDown then
+                                                            print("no")
+                                                            mouse1release()
+                                                            MouseDown = false
+                                                        end
+                                                    end
+
+                                                    task.wait(TriggerBotShotDelay/1000)
+                                                    TriggerBotDebounce = false
+                                                end
                                             end)
-                                        elseif not Humanoid then
-                                            if MouseDown then
-                                                print("no")
-                                                mouse1release()
-                                                MouseDown = false
-                                            end
+                                        end
+                                    elseif not Humanoid then
+                                        if MouseDown then
+                                            print("no")
+                                            mouse1release()
+                                            MouseDown = false
                                         end
                                     end
                                 end
@@ -113,16 +133,30 @@ local GlobalTabs = {
                                         if TriggerBotValue then
                                             print("triggerbot")
                                             task.delay(TriggerBotDelay/1000, function()
-                                                print("yes")
-                                                mouse1press()
-                                                MouseDown = true
+                                                if not TriggerBotDebounce then
+                                                    TriggerBotDebounce = true
+                                                    if HumanoidCheck(Mouse.Target) then
+                                                        print("yes")
+                                                        mouse1press()
+                                                        MouseDown = true
+                                                    else
+                                                        if MouseDown then
+                                                            print("no")
+                                                            mouse1release()
+                                                            MouseDown = false
+                                                        end
+                                                    end
+
+                                                    task.wait(TriggerBotShotDelay/1000)
+                                                    TriggerBotDebounce = false
+                                                end
                                             end)
-                                        elseif not Humanoid then
-                                            if MouseDown then
-                                                print("no")
-                                                mouse1release()
-                                                MouseDown = false
-                                            end
+                                        end
+                                    elseif not Humanoid then
+                                        if MouseDown then
+                                            print("no")
+                                            mouse1release()
+                                            MouseDown = false
                                         end
                                     end
                                 end
@@ -159,16 +193,35 @@ local GlobalTabs = {
         })
 
         TriggerBotTab:Slider({
-            Text = "Distance Check (in Studs)",
+            Text = "Distance Check (in studs)",
             Min = 100,
             Max = 1500,
             Def = 1500,
 
             Callback = function(Value)
-                TriggerBotDelay = Value
+                TriggerBotDistanceCheck = tonumber(Value)
             end
         })
-    end
+
+        TriggerBotTab:Slider({
+            Text = "Shot Delay (in ms)",
+            Min = 100,
+            Max = 2000,
+            Def = 100,
+
+            Callback = function(Value)
+                TriggerBotShotDelay = Value
+            end
+        })
+    end,
+
+    ["CustomCrosshair"] = function(Window)
+        local CustomCrossTab = Window:NewTab({
+            Title = "Custom Crosshair"
+        })
+
+        
+    end,
 }
 
 local function CreateUI()
