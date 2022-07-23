@@ -12,20 +12,33 @@ local function RayCast(Point1, Point2, WL)
     return workspace:FindPartOnRayWithIgnoreList(Cast, WL, false, true)
 end
 
-local function HumanoidCheck(Part)
+local function HumanoidCheck(Part, TeamCheck)
     if Part and Part.Parent then
         local Parent = Part.Parent
         local Humanoid = Parent:FindFirstChild("Humanoid")
+        local HPlayer = Players:GetPlayerFromCharacter(Parent)
 
         if Humanoid then
-            return Parent, Humanoid
+            if TeamCheck then
+                if not (Player.TeamColor == HPlayer.TeamColor) then
+                    return Parent, Humanoid
+                end
+            else
+                return Parent, Humanoid
+            end
         else
             if Part.Parent.Parent then
                 Parent = Part.Parent.Parent
                 Humanoid = Parent:FindFirstChild("Humanoid")
 
                 if Humanoid then
-                    return Parent, Humanoid
+                    if TeamCheck then
+                        if not (Player.TeamColor == HPlayer.TeamColor) then
+                            return Parent, Humanoid
+                        end
+                    else
+                        return Parent, Humanoid
+                    end
                 end
             end
         end
@@ -55,7 +68,7 @@ local SupportedGames = {
         
     end, {"TriggerBot"}},
 
-    [1093237560] = {function(Window) -- random aim trainer
+    [155615604] = {function(Window) -- pl
         
     end, {"TriggerBot"}},
 
@@ -91,7 +104,7 @@ local GlobalTabs = {
                                 if (Mouse.Hit.Position - Player.Character.HumanoidRootPart.Position).Magnitude <= TriggerBotDistanceCheck then
                                     print("Distance good")
                                     local Hit, Position = RayCast(Player.Character.HumanoidRootPart.Position, Mouse.Hit.Position, {Player.Character})
-                                    local Parent, Humanoid = HumanoidCheck(Hit)
+                                    local Parent, Humanoid = HumanoidCheck(Hit, TriggerBotTeamCheck)
 
                                     if Humanoid then
                                         print("Humanoid found")
@@ -99,7 +112,7 @@ local GlobalTabs = {
                                             task.delay(TriggerBotDelay/1000, function()
                                                 if not TriggerBotDebounce then
                                                     TriggerBotDebounce = true
-                                                    if HumanoidCheck(Mouse.Target) then
+                                                    if HumanoidCheck(Mouse.Target, TriggerBotTeamCheck) then
                                                         print("yes")
                                                         mouse1press()
                                                         MouseDown = true
@@ -127,7 +140,7 @@ local GlobalTabs = {
                              else
                                 if (Mouse.Hit.Position - Player.Character.HumanoidRootPart.Position).Magnitude <= TriggerBotDistanceCheck then
                                     print("Distance good")
-                                    local Parent, Humanoid = HumanoidCheck(Mouse.Target)
+                                    local Parent, Humanoid = HumanoidCheck(Mouse.Target, TriggerBotTeamCheck)
                                     if Humanoid then
                                         print("humanoid found")
                                         if TriggerBotValue then
@@ -135,7 +148,7 @@ local GlobalTabs = {
                                             task.delay(TriggerBotDelay/1000, function()
                                                 if not TriggerBotDebounce then
                                                     TriggerBotDebounce = true
-                                                    if HumanoidCheck(Mouse.Target) then
+                                                    if HumanoidCheck(Mouse.Target, TriggerBotTeamCheck) then
                                                         print("yes")
                                                         mouse1press()
                                                         MouseDown = true
@@ -220,7 +233,7 @@ local GlobalTabs = {
             Title = "Custom Crosshair"
         })
 
-        
+
     end,
 }
 
