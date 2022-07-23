@@ -18,7 +18,7 @@ local function HumanoidCheck(Part, TeamCheck)
         local Humanoid = Parent:FindFirstChild("Humanoid")
         local HPlayer = Players:GetPlayerFromCharacter(Parent)
 
-        if Humanoid then
+        if Humanoid and HPlayer then
             if TeamCheck then
                 if not (Player.TeamColor == HPlayer.TeamColor) then
                     return Parent, Humanoid
@@ -30,6 +30,7 @@ local function HumanoidCheck(Part, TeamCheck)
             if Part.Parent.Parent then
                 Parent = Part.Parent.Parent
                 Humanoid = Parent:FindFirstChild("Humanoid")
+                HPlayer = Players:GetPlayerFromCharacter(Parent)
 
                 if Humanoid then
                     if TeamCheck then
@@ -64,7 +65,7 @@ local SupportedGames = {
         
     end, {"TriggerBot"}},
 
-    [7142695791] = {function(Window) -- th3ltgrounds
+    [402122991] = {function(Window) -- rwp
         
     end, {"TriggerBot"}},
 
@@ -72,6 +73,9 @@ local SupportedGames = {
         
     end, {"TriggerBot"}},
 
+    [621129760] = {function(Window) -- KAT
+        
+    end, {"TriggerBot"}},
 }
 
 local GlobalTabs = {
