@@ -76,6 +76,10 @@ local SupportedGames = {
     [621129760] = {function(Window) -- KAT
         
     end, {"TriggerBot"}},
+
+    [1444844592] = {function(Window) -- KAT
+        
+    end, {"TriggerBot"}},
 }
 
 local GlobalTabs = {
@@ -233,8 +237,36 @@ local GlobalTabs = {
     end,
 
     ["CustomCrosshair"] = function(Window)
+        local CustomCrossEnabled = false
+        local CrossConnection = false
+        local CrossID = 0
+
         local CustomCrossTab = Window:NewTab({
             Title = "Custom Crosshair"
+        })
+
+        CustomCrossTab:Toggle({
+            Text = "Custom Crosshair",
+            Callback = function(boolean)
+                CustomCrossEnabled = boolean
+
+                if CustomCrossEnabled then
+                    CrossConnection = RunService.RenderStepped:Connect(function()
+                        Mouse.Icon = CrossID
+                    end)
+                else
+                    Mouse.Icon = 0
+                    CrossConnection:Disconnect()
+                end
+            end
+        })
+    end,
+
+    ["HBE"] = function(Window)
+        local HBEEnabled = false
+        local HBESize = 0
+        local HBETab = Window:NewTab({
+            Title = "Hitbox Expander"
         })
 
 
