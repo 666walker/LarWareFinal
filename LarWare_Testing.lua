@@ -55,7 +55,7 @@ local SupportedGames = {
 
     [2262441883] = {function(Window) -- es
 
-    end, {"TriggerBot"}},
+    end, {"TriggerBot","CustomCrosshair"}},
 
     [3297964905] = {function(Window) -- weaponry
 
@@ -249,15 +249,25 @@ local GlobalTabs = {
             Text = "Custom Crosshair",
             Callback = function(boolean)
                 CustomCrossEnabled = boolean
-
                 if CustomCrossEnabled then
                     CrossConnection = RunService.RenderStepped:Connect(function()
-                        Mouse.Icon = CrossID
+                        Mouse.Icon = "rbxassetid://"..CrossID
                     end)
                 else
                     Mouse.Icon = 0
-                    CrossConnection:Disconnect()
+
+                    if CrossConnection then
+                        CrossConnection:Disconnect()
+                    end
                 end
+            end
+        })
+
+        CustomCrossTab:TextBox({
+            PlaceHolder = "Enter Image ID here",
+
+            Callback = function(text)
+                CrossID = text
             end
         })
     end,
